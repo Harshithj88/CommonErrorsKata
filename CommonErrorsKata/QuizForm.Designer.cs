@@ -40,29 +40,29 @@
             // 
             this.pbImage.Location = new System.Drawing.Point(12, 45);
             this.pbImage.Name = "pbImage";
-            this.pbImage.Size = new System.Drawing.Size(1117, 690);
+            this.pbImage.Size = new System.Drawing.Size(874, 509);
             this.pbImage.TabIndex = 0;
             this.pbImage.TabStop = false;
             // 
             // lstAnswers
             // 
             this.lstAnswers.FormattingEnabled = true;
-            this.lstAnswers.Location = new System.Drawing.Point(1136, 45);
+            this.lstAnswers.Location = new System.Drawing.Point(900, 45);
             this.lstAnswers.Name = "lstAnswers";
-            this.lstAnswers.Size = new System.Drawing.Size(120, 654);
+            this.lstAnswers.Size = new System.Drawing.Size(120, 472);
             this.lstAnswers.TabIndex = 1;
             // 
             // progress
             // 
             this.progress.Location = new System.Drawing.Point(12, 16);
             this.progress.Name = "progress";
-            this.progress.Size = new System.Drawing.Size(1117, 23);
+            this.progress.Size = new System.Drawing.Size(874, 23);
             this.progress.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1180, 26);
+            this.label1.Location = new System.Drawing.Point(943, 26);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(27, 13);
             this.label1.TabIndex = 3;
@@ -70,7 +70,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(1136, 706);
+            this.btnCancel.Location = new System.Drawing.Point(900, 525);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(120, 29);
             this.btnCancel.TabIndex = 4;
@@ -82,7 +82,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1258, 747);
+            this.ClientSize = new System.Drawing.Size(1026, 562);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.progress);
@@ -105,4 +105,3 @@
         private System.Windows.Forms.Button btnCancel;
     }
 }
-

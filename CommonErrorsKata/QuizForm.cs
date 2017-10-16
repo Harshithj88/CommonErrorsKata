@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -10,22 +12,25 @@ namespace CommonErrorsKata
 {
     public partial class CommonErrorsForm : Form
     {
-        private readonly AnswerQueue<TrueFalseAnswer> answerQueue;
-        private readonly string[] files;
-        private readonly SynchronizationContext synchronizationContext;
-        private int i = 100;
-        private string currentBaseName = null;
-        private readonly string[] possibleAnswers = null;
+         // Microsoft and ReSharper Naming Conventions suggested Pascal Case for Consts
+         private const int MinAnswers = 15;
+ 
+         private readonly AnswerQueue<TrueFalseAnswer> answerQueue;
+         private readonly string[] files;
+         private readonly SynchronizationContext synchronizationContext;
+         private int CurrentPercent = 100;
+         private string currentImageFileName = null;
+         private readonly string[] fileNames;
 
         public CommonErrorsForm()
         {
             InitializeComponent();
             synchronizationContext = SynchronizationContext.Current;
-            files = System.IO.Directory.GetFiles(Environment.CurrentDirectory +  @"..\..\..\ErrorPics");
-            possibleAnswers = new string[] { "Missing File", "null instance", "divide by zero" };
-            lstAnswers.DataSource = possibleAnswers;
-            answerQueue = new AnswerQueue<TrueFalseAnswer>(15);
-            Next();
+            files = Directory.GetFiles(Environment.CurrentDirectory + @"..\..\..\ErrorPics");
+            fileNames = files.Select(file => Path.GetFileName(file)).ToArray();
+            lstAnswers.DataSource = fileNames.Select(element => element.Replace(".png", "")).ToList();
+            answerQueue = new AnswerQueue<TrueFalseAnswer>(MinAnswers);
+            AskNextQuestion();
             lstAnswers.Click += LstAnswers_Click;
             StartTimer();
         }
@@ -33,9 +38,9 @@ namespace CommonErrorsKata
         {
             await Task.Run(() =>
             {
-                for (i = 100; i > 0; i--)
+                              for (CurrentPercent = 100; CurrentPercent > 0; CurrentPercent--)
                 {
-                    UpdateProgress(i);
+                    UpdateProgress(CurrentPercent);
                     Thread.Sleep(50);
                 }
                 Message("Need to be quicker on your feet next time!  Try again...");
@@ -44,24 +49,24 @@ namespace CommonErrorsKata
 
         private void LstAnswers_Click(object sender, EventArgs e)
         {
-            i = 100;
-            var tokens = currentBaseName.Split(' ');
-            //TODO:  Figure out what is a valid answer.
-            answerQueue.Enqueue(new TrueFalseAnswer(true));
-            Next();
+
+            CurrentPercent = 100;
+            var isCorrectAnswer = currentImageFileName.Replace(".png", "") == lstAnswers.SelectedItem.ToString();
+            answerQueue.Enqueue(new TrueFalseAnswer(isCorrectAnswer));
+            AskNextQuestion();
         }
 
-        private void Next()
+        private void AskNextQuestion()
         {
-            if (answerQueue.Count == 15 && answerQueue.Grade >= 98)
+            if (answerQueue.Count >= MinAnswers && answerQueue.Grade >= 98)
             {
                 MessageBox.Show("Congratulations you've defeated me!");
                 Application.Exit();
                 return;
             }
-            label1.Text = answerQueue.Grade.ToString() + "%";
+            label1.Text = answerQueue.Grade + "%";
             var file = files.GetRandom();
-            currentBaseName= Path.GetFileName(file);
+            currentImageFileName = Path.GetFileName(file);
             pbImage.ImageLocation = file;
         }
 
@@ -71,7 +76,7 @@ namespace CommonErrorsKata
                 progress.Value = value;
             }), value);
         }
-        public void Message(string value)
+          public void Message(string value)
         {
             synchronizationContext.Post(new SendOrPostCallback(x => {
                 MessageBox.Show(value);
